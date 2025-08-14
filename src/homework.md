@@ -23,3 +23,4 @@ Explore routing and use of ?,+,(),* in the routes
 use of regex in routes /a/,/*fly$/
 Reading the query params in the routes 
 Reading the dynamic routes
+what is the difference between params and query
