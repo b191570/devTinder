@@ -1,4 +1,4 @@
----------------------------------------------------------DAY-1----------------------------------------------------
+________________________________________________________DAY-1_______________________________________________________
 create a repo
 initialize the repo
 node modules,package.json,package-lock.json
@@ -11,7 +11,7 @@ what are dependencies
 what is the use of '-g' while npm install
 differnce between '~(tilde)' and '^(caret)'
 
----------------------------------------------------------DAY-2------------------------------------------------------
+________________________________________________________DAY-2_______________________________________________________
 initialize the git 
 .gitignore
 create a remote repoon github
@@ -24,3 +24,12 @@ use of regex in routes /a/,/*fly$/
 Reading the query params in the routes 
 Reading the dynamic routes
 what is the difference between params and query
+
+________________________________________________________DAY-3_______________________________________________________
+multiple Route Handlers -play with the code
+next()
+next function and errors along with res.send()
+app.use('/route',(req,res)=>{[r1,r2,r3,r4,r5]})
+what is middleware
+how express JS basically handles requests behind the scenes
+difference between app.use() and app.all()
