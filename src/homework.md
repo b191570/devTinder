@@ -33,3 +33,7 @@ app.use('/route',(req,res)=>{[r1,r2,r3,r4,r5]})
 what is middleware
 how express JS basically handles requests behind the scenes
 difference between app.use() and app.all()
+
+________________________________________________________DAY-4_______________________________________________________
+
+create a database.js to check wheter the node connected to db or not
