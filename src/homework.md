@@ -36,4 +36,14 @@ difference between app.use() and app.all()
 
 ________________________________________________________DAY-4_______________________________________________________
 
-create a database.js to check wheter the node connected to db or not
+create a db.js to check whether the node connected to db or not
+connect application to DB
+call the connectDB function and connect to database before starting application on 4000
+create the tables user, connectionrequest
+create POST/signup API to add data to database
+Push some records using API calls from postman
+error handling 
+
+________________________________________________________DAY-5_______________________________________________________
+
+difference between res.send() and res.json()
