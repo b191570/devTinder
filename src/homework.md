@@ -47,3 +47,24 @@ error handling
 ________________________________________________________DAY-5_______________________________________________________
 
 difference between res.send() and res.json()
+difference between javascript and json
+
+________________________________________________________DAY-6_______________________________________________________
+
+add express.json() to your code
+make your signup API dynamic to receive data from the end user(may be postman too)
+get API using email
+verify user is valid or not based on email and password
+how to use try catch properly in node
+difference between createConnection and createPool
+write the API to update the data of a user
+update the user data based on email Id as refference
+
+________________________________________________________DAY-6_______________________________________________________
+
+Add age validation and gender validation
+sql: updating 2 tables based on user object as input
+creating timestamps of user account (creationt time and last account update time)
+creating strong password (includes min of 1 uppercase,1 lower case,1 numerical and 1 special character)
+difference between left join and right join and how do they work
+
