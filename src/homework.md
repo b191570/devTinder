@@ -64,7 +64,17 @@ ________________________________________________________DAY-6___________________
 
 Add age validation and gender validation
 sql: updating 2 tables based on user object as input
-creating timestamps of user account (creationt time and last account update time)
-creating strong password (includes min of 1 uppercase,1 lower case,1 numerical and 1 special character)
+adding new table to db (skills)
 difference between left join and right join and how do they work
 
+________________________________________________________DAY-7_______________________________________________________
+
+add validations for each column
+improve db schema 
+creating timestamps of user account (creationt time and last account update time)
+creating strong password (includes min of 1 uppercase,1 lower case,1 numerical and 1 special character)
+adding a validation for email (email id should not be modified)
+
+________________________________________________________DAY-8_______________________________________________________
+
+update the user and skills tables based on json data provided by user

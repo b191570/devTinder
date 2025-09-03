@@ -16,5 +16,4 @@ const db=mysql.createPool({
         queueLimit:0,
 });
 console.log("MYSQL connection successful")
-
 module.exports=db;
