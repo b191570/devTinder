@@ -1,5 +1,7 @@
 const express = require('express');
 const dbPromise = require('./db'); 
+const validator = require('validator');
+
 const db = dbPromise;
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -8,6 +10,12 @@ app.use(express.json()); // to parse JSON bodies
 app.post('/signup/',async(req,res)=>{
   try{
       let email = req.body.email.trim();
+      if(!validator.isEmail(email)){
+        res.json("Enter valid Email Id");
+      }
+      if(!validator.isStrongPassword(req.body.password)){
+        res.json("Please enter strong Password");
+      }
       //adding age and gender validations
       let age=req.body.age;
       let gender=req.body.gender.toUpperCase();
@@ -108,9 +116,14 @@ app.patch("/update/:emailId",async(req,res)=>{
                return res.status(404).json({message:"email is required to update"});
           }
           const email=req.params.emailId.trim();
-          const fields=Object.keys(req.body);
           const updates=req.body;
-          const allowedFields=['firstName','lastName','password','age','gender','photoUrl','About','skills'];
+          let skills=[];
+          if("skills" in updates){
+              skills=req.body.skills;
+              delete updates.skills;
+          }
+          const fields=Object.keys(req.body);
+          const allowedFields=['firstName','lastName','password','age','gender','photoUrl','About'];
           const isValid = fields.every(field => allowedFields.includes(field));
           if(!isValid){
               return res.status(404).json({message:'Invaid field in update request'});
@@ -119,25 +132,24 @@ app.patch("/update/:emailId",async(req,res)=>{
           const values = fields.map(f => updates[f]);
           const sql = `UPDATE user SET ${setClause} WHERE email = ?`;
           const output=await db.query(sql,[...values,email]);
+          
+          if (skills.length!==0){
           const idqry='select id from user where email=?'
-          const userRows=await db.query(idqry,email);
+          const [userRows]=await db.query(idqry,email);
           const userId=userRows[0].id;
          //to be modified
-          if(updates.skills){
-            const skills=updates.skills;
             const query='delete from skills where userId=?'
             await db.query(query,[userId]);
             const skillqry='insert into skills(userId,skill) values ?'
             const skillsUpdation=skills.map(skill=>[userId,skill]);
             await db.query(skillqry,[skillsUpdation]);
-          }
-          if (output.affectedRows!==0){
+          if (output.affectedRows!==0 && skillsUpdation.affectedRows!==0){
             return res.status(200).json('UPDATE SUCCESSFULL');
           }
-    }
+    }}
     catch(err){
         console.error({err});
-        return res.json('UPDATION FAILED!');
+        return res.json(err.sqlMessage);
     }
 })
 //getting all users data for feed

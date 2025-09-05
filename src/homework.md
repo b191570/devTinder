@@ -78,3 +78,8 @@ adding a validation for email (email id should not be modified)
 ________________________________________________________DAY-8_______________________________________________________
 
 update the user and skills tables based on json data provided by user
+difference between "req.params" and "req.params?"
+adding email validation (ex: email:"akhi@gmail.com","xyzsaseffdgy")=>both emails is accepted by our db now.
+photo Url validator need to be added
+strong password is added
+NEVER TRUST req.body
