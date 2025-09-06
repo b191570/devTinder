@@ -1,5 +1,7 @@
 const express = require('express');
 const dbPromise = require('./db'); 
+const bcrypt=require('bcrypt');
+const {validateSignUpData}=require("./utils/validations");
 const validator = require('validator');
 
 const db = dbPromise;
@@ -10,52 +12,36 @@ app.use(express.json()); // to parse JSON bodies
 app.post('/signup/',async(req,res)=>{
   try{
       let email = req.body.email.trim();
-      if(!validator.isEmail(email)){
-        res.json("Enter valid Email Id");
-      }
-      if(!validator.isStrongPassword(req.body.password)){
-        res.json("Please enter strong Password");
-      }
-      //adding age and gender validations
-      let age=req.body.age;
-      let gender=req.body.gender.toUpperCase();
-      if(age<18 || age>100){
-        return res.status(404).json(`Invalid age\nAge should be between 18 and 100`);
-      }
-      if(!['F','M','O'].includes(gender)){
-         return res.status(404).json(`Invalid gender\nGender should be F,M,O`);
-      }
+      let request=req.body;
+      validateSignUpData(req);
+      const password=req.body.password;
+      const hashedPassword=await bcrypt.hash(password,10);
       const userQuery = `INSERT INTO user (firstName, lastName, email, password, age , gender, photoUrl, About) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
       const skillsQuery=`INSERT INTO skills (userId,skill) VALUES ?`;
       const userValues= [
       req.body.firstName,
       req.body.lastName,
       email,
-      req.body.password,
-      age,
-      gender,
+      hashedPassword,
+      req.body.age,
+      req.body.gender,
       req.body.photoUrl,
       req.body.About
       ];
       const [outputuser]=await db.query(userQuery,userValues);
       const userId = outputuser.insertId;
-      if(req.body.skills && req.body.skills.length > 0) 
+      if(request.skills && request.skills.length > 0) 
       {
           const skillsValues = req.body.skills.map(skill => [userId, skill]);
           await db.query(skillsQuery,[skillsValues]);
-      }
-      if(outputuser.effectedRows===0 && outputskills.effectedRows===0)
-      {
-        return res.status(404).json('user not added due to internal errors');
       }
       return res.status(200).json('User added successfully');
       }
   catch(err) {
     console.error("Error inserting user:", err);
-   return  res.status(500).json(err.sqlMessage);
+   return  res.status(500).send({message: err.message});
   }
 });
-
 
 //get user by email
 app.get('/user',async(req,res)=>{
@@ -76,19 +62,24 @@ app.get('/user',async(req,res)=>{
 })
 
 //checking the user email and password is valid or not
-app.get('/login',async(req,res)=>{
-        const qry='select * from user where email=? and password=?';
-        const output=await db.query(qry,[req.body.email,req.body.password]);
-        const qr='select * from user where email=?';
-        const opt=await db.query(qr,[req.body.email]);
-        if(output[0].length>0){
-            res.status(200).json("login Successful");
+app.post ('/login',async(req,res)=>{
+        try{
+            const email=req.body.email;
+            const password=req.body.password;
+            const query='select password from user where email=?';
+            const [row]=await db.query(query,[email]);
+            if(row.length===0){
+              throw new Error("no user");
+            }
+            const hashedPassword=row[0].password.toString();
+            const isValid=await bcrypt.compare(password,hashedPassword);
+            if(isValid===false){
+                throw new Error("Invalid Credentials");
+            }
+            return res.status(200).send('login Successful!!');
         }
-        if(opt[0].length>0){
-            res.status(404).json(`{message:wrong password}`);
-        }
-        else{
-          res.status(404).json("USER NOT FOUND");
+        catch(err){
+          return res.status(400).send({message: err.message})
         }
 })
 //delete user based on email

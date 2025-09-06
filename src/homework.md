@@ -81,5 +81,11 @@ update the user and skills tables based on json data provided by user
 difference between "req.params" and "req.params?"
 adding email validation (ex: email:"akhi@gmail.com","xyzsaseffdgy")=>both emails is accepted by our db now.
 photo Url validator need to be added
-strong password is added
+strong password validation is added
 NEVER TRUST req.body
+updating login data with entered password and hashed stored password in DB
+
+________________________________________________________DAY-9_______________________________________________________
+
+validating Signup API
+updating Login API
