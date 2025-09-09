@@ -3,12 +3,13 @@ const dbPromise = require('./db');
 const bcrypt=require('bcrypt');
 const {validateSignUpData}=require("./utils/validations");
 const validator = require('validator');
+const cookieParser=require("cookie-parser");
 
 const db = dbPromise;
 const app = express();
 const PORT = process.env.PORT || 4000;
 app.use(express.json()); // to parse JSON bodies
-
+app.use(cookieParser())
 app.post('/signup/',async(req,res)=>{
   try{
       let email = req.body.email.trim();
@@ -76,11 +77,18 @@ app.post ('/login',async(req,res)=>{
             if(isValid===false){
                 throw new Error("Invalid Credentials");
             }
+            res.cookie("token","anomxklamanxoadninsdaipn");
             return res.status(200).send('login Successful!!');
         }
         catch(err){
           return res.status(400).send({message: err.message})
         }
+})
+
+app.get('/profile',async(req,res)=>{
+      const token=req.cookies;
+      res.send("Reading Cookie");
+      console.log(token);
 })
 //delete user based on email
 app.delete('/deleteuser',async(req,res)=>{
